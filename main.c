@@ -20,7 +20,8 @@ typedef struct {
 
 void showData(RowData* allData, int size) {
 
-    //Show all data
+    //Show some data
+    printf("Os primeiros 5 resultados:\n");
     for (int i = 0; i < size && i < 5; i++) {
         printf("%s | %s | %.4f | %.4f | %s | %s | %s | %s | %s\n",
                allData[i].id,
@@ -145,22 +146,176 @@ void bubble_sort_data(RowData *data, int size) {
     }
 }
 
+void bubble_sort(RowData *data, int size, const char *element) {
+    int operation = 0;
+    int comparation = 0;
+    int change = 0;
+    int line = 0;
+
+    for(int i = 0; i < size-1; i++) {
+        operation++;
+            for (int j = 0; j < size - i - 1; j++) {
+                operation++;
+                
+                const char *v1;
+                const char *v2;
+
+                if (element == "data_pas") {
+                    v1 = data[j].data_pas;
+                    v2 = data[j + 1].data_pas;
+                } else if (strcmp(element, "bioma") == 0) {
+                    v1 = data[j].bioma;
+                    v2 = data[j + 1].bioma;
+                } else if (strcmp(element, "municipio") == 0) {
+                    v1 = data[j].municipio;
+                    v2 = data[j + 1].municipio;
+                } else {
+                    printf("Erro ao achar o elemento &s\n", element);
+                    return;
+                }
+                comparation++;
+
+                if (strcmp(v1, v2) > 0) {
+                    RowData temp = data[j];
+                    data[j] = data[j + 1];
+                    data[j+1] = temp;
+                    change++;
+                }
+            }
+
+        
+    }
+
+    //Open File
+    FILE *file = fopen("report.txt", "a");
+    if (file == NULL) {
+        printf("Erro ao criar o arquivo.\n");
+        return;
+    }
+
+    fprintf(file, "-------- %s - Bubble Sort --------\n", element);
+    fprintf(file, "Número de operações: %d\nNúmero de Comparações: %d\nNúmero de Trocas: %d\nComplexidade: O(n^2)\nTotal de linhas: %d\n\n", operation, comparation, change, size);
+
+    fclose(file);
+
+
+    // show report
+    printf("\n-------- %s - Bubble Sort --------\n", element);
+    printf("Número de operações: %d\nNúmero de Comparações: %d\nNúmero de Trocas: %d\nComplexidade: O(n^2)\nTotal de linhas: %d\n\n", operation, comparation, change, size);
+}
+
+void quick_sort(RowData *data, int size) {
+
+}
+
+void insertion_sort(RowData *data, int size) {
+
+}
+
+void binary_insertion_sort(RowData *data, int size) {
+
+}
+
+void selection_sort(RowData *data, int size) {
+
+}
+
+void heap_sort(RowData *data, int size) {
+
+}
+
+void merge_sort(RowData *data, int size) {
+
+}
+
+void bucket_sort(RowData *data, int size) {
+
+}
+
+void show_report() {
+
+}
+
 int main()
 {
     RowData *data;
     int count = 0;
+    int element_option;
+    int sort_option;
+
+    const char *element[3];
+    element[0] = "data_pas";
+    element[1] = "bioma";
+    element[2] = "municipio";
+
+    const char *sort[8];
+    sort[0] = "Bubble Sort";
+    sort[1] = "Quick Sort";
+    sort[2] = "Insertion Sort";
+    sort[3] = "Binary Insertion Sort";
+    sort[4] = "Selection Sort";
+    sort[5] = "Heap Sort";
+    sort[6] = "Merge Sort";
+    sort[7] = "Bucket Sort";
+    
+
 
     // Enable UTF-8
     SetConsoleOutputCP(CP_UTF8);  
     SetConsoleCP(CP_UTF8);
     setlocale(LC_ALL, "pt_BR.UTF-8");
 
-    
-    data = read_csv(&count);
+    //Start file
+    FILE *file = fopen("report.txt", "w");
+    if (file == NULL) {
+        printf("Erro ao criar o arquivo.\n");
+        return;
+    }
 
-    bubble_sort_data(data, count);
+    while (1) {
+        printf("\nEscolha qual dado você deseja ordenar: \n1.Data\n2.Bioma\n3.Munícipio\n4.Ver Relatório\n5.Sair\n");
+        scanf("%d", &element_option);
 
-    showData(data, count);
+        if (element_option == 4) {
+            show_report();
+        } else if (element_option >= 5) {
+            break;
+        }
+
+        // Select the sort algoritmo
+        printf("Escolha o algoritmo de ordenação: \n1.Bubble Sort\n2.Quick Sort\n3.Insertion Sort\n4.Binary Insertion Sort\n5.Selection Sort\n6.Heap Sort\n7.Merge Sort\n8.Bucket Sort\n9.Sair\n");
+        scanf("%d", &sort_option);
+
+        if (sort_option >= 4) {
+            break;
+        }
+
+        data = read_csv(&count);
+
+        if (sort_option == 1) {
+            bubble_sort(data, count, element[element_option-1]);
+        } else if (sort_option == 2) {
+            //quick_sort();
+        } else if (sort_option == 3) {
+            //insertion_sort();
+        } else if (sort_option == 4) {
+            //binary_insertion_sort
+        } else if (sort_option == 5) {
+            //selection_sort
+        } else if (sort_option == 6) {
+            //heap_sort();
+        } else if (sort_option == 7) {
+            //merge_sort();
+        } else if (sort_option == 8) {
+            //bucket_sort();
+        }
+
+        //Show data
+        showData(data, count);
+
+        
+    }
+
     
     return 0;
 

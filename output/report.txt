@@ -1,0 +1,14 @@
+-------- data_pas - Bubble Sort --------
+Número de operações: 85040360
+Número de Comparações: 85027320
+Número de Trocas: 8003222
+Complexidade: O(n^2)
+Total de linhas: 13041
+
+-------- municipio - Bubble Sort --------
+Número de operações: 85040360
+Número de Comparações: 85027320
+Número de Trocas: 32618096
+Complexidade: O(n^2)
+Total de linhas: 13041
+
