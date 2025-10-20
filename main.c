@@ -18,6 +18,11 @@ typedef struct {
     char bioma[30];
 } RowData;
 
+//quick sort report
+int quick_comparation = 0;
+int quick_partitions = 0;
+int quick_swaps = 0;
+
 void showData(RowData* allData, int size) {
 
     //Show some data
@@ -43,7 +48,7 @@ RowData* read_csv(int *total_count) {
     // Variable
     FILE *file;
     char line[1024];
-    RowData *data = malloc(sizeof(RowData) * 13043);
+    RowData *data = malloc(sizeof(RowData) * 13045);
     int count = 0;
 
     // Open the CSV
@@ -51,7 +56,7 @@ RowData* read_csv(int *total_count) {
 
     if (file == NULL) {
         printf("Error in open the file!");
-        return 1;
+        return NULL;
     }
 
     //Read the csv
@@ -198,14 +203,89 @@ void bubble_sort(RowData *data, int size, const char *element) {
 
     fclose(file);
 
-
     // show report
     printf("\n-------- %s - Bubble Sort --------\n", element);
     printf("Número de operações: %d\nNúmero de Comparações: %d\nNúmero de Trocas: %d\nComplexidade: O(n^2)\nTotal de linhas: %d\n\n", operation, comparation, change, size);
 }
 
-void quick_sort(RowData *data, int size) {
+void quick_sort(RowData *data, int size, const char *element) {
+    if(size <=1) return;
 
+    quick_partitions++;
+
+    RowData *minors = malloc(sizeof(RowData) * size);
+    RowData *equals = malloc(sizeof(RowData) * size);
+    RowData *biggest = malloc(sizeof(RowData) * size);
+
+    int minors_count = 0, equals_count = 0, biggest_count = 0;
+    
+    if (strcmp(element, "data_pas") == 0) {
+        const char *pivo = data[0].data_pas;
+
+        for (int i = 0; i < size; i++) {
+            quick_comparation++;
+            int cmp = strcmp(data[i].data_pas, pivo);
+            if (cmp < 0) {
+                minors[minors_count++] = data[i];
+            } else if (cmp == 0) {
+                equals[equals_count++] = data[i];
+            } else {
+                biggest[biggest_count++] = data[i];
+            }
+        }
+    } else if (strcmp(element, "bioma") == 0) {
+        const char *pivo = data[0].bioma;
+
+        for (int i = 0; i < size; i++) {
+            quick_comparation++;
+            int cmp = strcmp(data[i].bioma, pivo);
+            if (cmp < 0) {
+                minors[minors_count++] = data[i];
+            } else if (cmp == 0) {
+                equals[equals_count++] = data[i];
+            } else {
+                biggest[biggest_count++] = data[i];
+            }
+        }
+    } else {
+        const char *pivo = data[0].municipio;
+
+        for (int i = 0; i < size; i++) {
+            quick_comparation++;
+            int cmp = strcmp(data[i].municipio, pivo);
+            if (cmp < 0) {
+                minors[minors_count++] = data[i];
+            } else if (cmp == 0) {
+                equals[equals_count++] = data[i];
+            } else {
+                biggest[biggest_count++] = data[i];
+            }
+        }
+    }
+
+    quick_sort(minors, minors_count, element);
+    quick_sort(biggest, biggest_count, element);
+
+    int index = 0;
+    for (int i = 0; i < minors_count; i++) {
+        data[index++] = minors[i];
+        quick_swaps++;
+    }
+    for (int i = 0; i < equals_count; i++) {
+        data[index++] = equals[i];
+        quick_swaps++;
+    }
+    for (int i = 0; i < biggest_count; i++) {
+        data[index++] = biggest[i];
+        quick_swaps++;
+    }
+
+    free(minors);
+    free(equals);
+    free(biggest);
+
+    
+    
 }
 
 void insertion_sort(RowData *data, int size) {
@@ -248,18 +328,6 @@ int main()
     element[1] = "bioma";
     element[2] = "municipio";
 
-    const char *sort[8];
-    sort[0] = "Bubble Sort";
-    sort[1] = "Quick Sort";
-    sort[2] = "Insertion Sort";
-    sort[3] = "Binary Insertion Sort";
-    sort[4] = "Selection Sort";
-    sort[5] = "Heap Sort";
-    sort[6] = "Merge Sort";
-    sort[7] = "Bucket Sort";
-    
-
-
     // Enable UTF-8
     SetConsoleOutputCP(CP_UTF8);  
     SetConsoleCP(CP_UTF8);
@@ -269,7 +337,6 @@ int main()
     FILE *file = fopen("report.txt", "w");
     if (file == NULL) {
         printf("Erro ao criar o arquivo.\n");
-        return;
     }
 
     while (1) {
@@ -280,6 +347,7 @@ int main()
             show_report();
         } else if (element_option >= 5) {
             break;
+            
         }
 
         // Select the sort algoritmo
@@ -288,6 +356,7 @@ int main()
 
         if (sort_option >= 4) {
             break;
+            
         }
 
         data = read_csv(&count);
@@ -295,7 +364,24 @@ int main()
         if (sort_option == 1) {
             bubble_sort(data, count, element[element_option-1]);
         } else if (sort_option == 2) {
-            //quick_sort();
+            
+            quick_sort(data, count, element[element_option-1]);
+
+            //Write File
+            FILE *file = fopen("report.txt", "a");
+            if (file == NULL) {
+                printf("Erro ao criar o arquivo.\n");
+            }
+
+            fprintf(file, "\n-------- %s - Quick Sort --------\n", element[element_option-1]);
+            fprintf(file, "Número de operações: %d\nNúmero de Comparações: %d\nNúmero de Partições: %d\nNúmero de Trocas: %d\nComplexidade: O(n log n)\nTotal de linhas: %d\n\n", quick_comparation + quick_partitions + quick_swaps, quick_comparation, quick_partitions, quick_swaps, count);
+
+            fclose(file);
+
+            // show report
+            printf("\n-------- %s - Quick Sort --------\n", element[element_option-1]);
+
+            printf("Número de operações: %d\nNúmero de Comparações: %d\nNúmero de Partições: %d\nNúmero de Trocas: %d\nComplexidade: O(n log n)\nTotal de linhas: %d\n\n", quick_comparation + quick_partitions + quick_swaps, quick_comparation, quick_partitions, quick_swaps, count);
         } else if (sort_option == 3) {
             //insertion_sort();
         } else if (sort_option == 4) {

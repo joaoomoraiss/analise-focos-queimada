@@ -1,14 +1,27 @@
--------- data_pas - Bubble Sort --------
-Número de operações: 85040360
-Número de Comparações: 85027320
-Número de Trocas: 8003222
-Complexidade: O(n^2)
+
+-------- bioma - Quick Sort --------
+Número de operações: 60767
+Número de Comparações: 30382
+Número de Partições: 3
+Número de Trocas: 30382
+Complexidade: O(n log n)
 Total de linhas: 13041
 
--------- municipio - Bubble Sort --------
-Número de operações: 85040360
-Número de Comparações: 85027320
-Número de Trocas: 32618096
-Complexidade: O(n^2)
+
+-------- data_pas - Quick Sort --------
+Número de operações: 4483175
+Número de Comparações: 2241399
+Número de Partições: 377
+Número de Trocas: 2241399
+Complexidade: O(n log n)
+Total de linhas: 13041
+
+
+-------- municipio - Quick Sort --------
+Número de operações: 4641535
+Número de Comparações: 2320540
+Número de Partições: 455
+Número de Trocas: 2320540
+Complexidade: O(n log n)
 Total de linhas: 13041
 
