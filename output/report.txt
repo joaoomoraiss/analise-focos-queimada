@@ -1,27 +1,21 @@
-
--------- bioma - Quick Sort --------
-Número de operações: 60767
-Número de Comparações: 30382
-Número de Partições: 3
-Número de Trocas: 30382
-Complexidade: O(n log n)
+-------- data_pas - Selection Sort --------
+Número de operações: 85040361
+Número de Comparações: 85027320
+Número de Trocas: 10673
+Complexidade: O(n^2)
 Total de linhas: 13041
 
-
--------- data_pas - Quick Sort --------
-Número de operações: 4483175
-Número de Comparações: 2241399
-Número de Partições: 377
-Número de Trocas: 2241399
-Complexidade: O(n log n)
+-------- bioma - Selection Sort --------
+Número de operações: 85040361
+Número de Comparações: 85027320
+Número de Trocas: 4882
+Complexidade: O(n^2)
 Total de linhas: 13041
 
-
--------- municipio - Quick Sort --------
-Número de operações: 4641535
-Número de Comparações: 2320540
-Número de Partições: 455
-Número de Trocas: 2320540
-Complexidade: O(n log n)
+-------- municipio - Selection Sort --------
+Número de operações: 85040361
+Número de Comparações: 85027320
+Número de Trocas: 12919
+Complexidade: O(n^2)
 Total de linhas: 13041
 

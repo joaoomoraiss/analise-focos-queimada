@@ -288,16 +288,128 @@ void quick_sort(RowData *data, int size, const char *element) {
     
 }
 
-void insertion_sort(RowData *data, int size) {
-
+void insertion_sort(RowData *data, int size, const char *element) {
+    int comparation = 0;
+    int swaps = 0;
+    int operations = 0;
+    
+    for (int i = 1; i < size; i++) {
+        operations++;
+        RowData key = data[i];
+        int j = i - 1;
+        
+        const char *key_value;
+        if (strcmp(element, "data_pas") == 0) {
+            key_value = key.data_pas;
+        } else if (strcmp(element, "bioma") == 0) {
+            key_value = key.bioma;
+        } else if (strcmp(element, "municipio") == 0) {
+            key_value = key.municipio;
+        } else {
+            printf("Erro ao achar o elemento %s\n", element);
+            return;
+        }
+        
+        while (j >= 0) {
+            operations++;
+            comparation++;
+            
+            const char *current_value;
+            if (strcmp(element, "data_pas") == 0) {
+                current_value = data[j].data_pas;
+            } else if (strcmp(element, "bioma") == 0) {
+                current_value = data[j].bioma;
+            } else {
+                current_value = data[j].municipio;
+            }
+            
+            if (strcmp(current_value, key_value) > 0) {
+                data[j + 1] = data[j];
+                swaps++;
+                j--;
+            } else {
+                break;
+            }
+        }
+        
+        data[j + 1] = key;
+    }
+    
+    // File
+    FILE *file = fopen("report.txt", "a");
+    if (file == NULL) {
+        printf("Erro ao criar o arquivo.\n");
+        return;
+    }
+    
+    fprintf(file, "-------- %s - Insertion Sort --------\n", element);
+    fprintf(file, "Número de operações: %d\nNúmero de Comparações: %d\nNúmero de Trocas: %d\nComplexidade: O(n^2)\nTotal de linhas: %d\n\n", operations, comparation, swaps, size);
+    
+    fclose(file);
+    
+    // Report
+    printf("\n-------- %s - Insertion Sort --------\n", element);
+    printf("Número de operações: %d\nNúmero de Comparações: %d\nNúmero de Trocas: %d\nComplexidade: O(n^2)\nTotal de linhas: %d\n\n", operations, comparation, swaps, size);
 }
 
 void binary_insertion_sort(RowData *data, int size) {
 
 }
 
-void selection_sort(RowData *data, int size) {
+void selection_sort(RowData *data, int size, const char *element) {
+    RowData temp;
+    const char *v1, *v2;
+    int min;
+    int comparation = 0;
+    int swaps = 0;
+    int operations = 0;
 
+    for (int i = 0; i < size; i++) {
+        operations++;
+        min = i;
+        for (int j = i + 1; j < size; j++) {
+            operations++;
+            comparation++;
+
+            if (strcmp(element, "data_pas") == 0) {
+                v1 = data[j].data_pas;
+                v2 = data[min].data_pas;
+            } else if (strcmp(element, "bioma") == 0) {
+                v1 = data[j].bioma;
+                v2 = data[min].bioma;
+            } else {
+                v1 = data[j].municipio;
+                v2 = data[min].municipio;
+            }
+
+            if (strcmp(v1, v2) < 0) {
+                min = j;
+            }
+        }
+
+        if (min != i) {
+            temp = data[i];
+            data[i] = data[min];
+            data[min] = temp;
+            swaps++;
+        }
+    }
+
+    // File
+    FILE *file = fopen("report.txt", "a");
+    if (file == NULL) {
+        printf("Erro ao criar o arquivo.\n");
+        return;
+    }
+    
+    fprintf(file, "-------- %s - Selection Sort --------\n", element);
+    fprintf(file, "Número de operações: %d\nNúmero de Comparações: %d\nNúmero de Trocas: %d\nComplexidade: O(n^2)\nTotal de linhas: %d\n\n", operations, comparation, swaps, size);
+    
+    fclose(file);
+    
+    // Report
+    printf("\n-------- %s - Selection Sort --------\n", element);
+    printf("Número de operações: %d\nNúmero de Comparações: %d\nNúmero de Trocas: %d\nComplexidade: O(n^2)\nTotal de linhas: %d\n\n", operations, comparation, swaps, size);
 }
 
 void heap_sort(RowData *data, int size) {
@@ -354,9 +466,8 @@ int main()
         printf("Escolha o algoritmo de ordenação: \n1.Bubble Sort\n2.Quick Sort\n3.Insertion Sort\n4.Binary Insertion Sort\n5.Selection Sort\n6.Heap Sort\n7.Merge Sort\n8.Bucket Sort\n9.Sair\n");
         scanf("%d", &sort_option);
 
-        if (sort_option >= 4) {
+        if (sort_option >= 9) {
             break;
-            
         }
 
         data = read_csv(&count);
@@ -383,11 +494,11 @@ int main()
 
             printf("Número de operações: %d\nNúmero de Comparações: %d\nNúmero de Partições: %d\nNúmero de Trocas: %d\nComplexidade: O(n log n)\nTotal de linhas: %d\n\n", quick_comparation + quick_partitions + quick_swaps, quick_comparation, quick_partitions, quick_swaps, count);
         } else if (sort_option == 3) {
-            //insertion_sort();
+            insertion_sort(data, count, element[element_option-1]);
         } else if (sort_option == 4) {
-            //binary_insertion_sort
+            //binary_insertion_sort();
         } else if (sort_option == 5) {
-            //selection_sort
+            selection_sort(data, count, element[element_option-1]);
         } else if (sort_option == 6) {
             //heap_sort();
         } else if (sort_option == 7) {
