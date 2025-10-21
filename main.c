@@ -42,17 +42,17 @@ void showData(RowData* allData, int size) {
 }
 
 // Read all the lines of a csv file
-// O(n^2)
-RowData* read_csv(int *total_count) {
-
-    // Variable
+RowData* read_csv(int *total_count, int year) {
     FILE *file;
     char line[1024];
     RowData *data = malloc(sizeof(RowData) * 13045);
     int count = 0;
+    char source[50];
+
+    sprintf(source, "../csv/focos_br_ms_ref_%d.csv", year);
 
     // Open the CSV
-    file = fopen("../csv/focos_br_ms_ref_2024.csv", "r");
+    file = fopen(source, "r");
 
     if (file == NULL) {
         printf("Error in open the file!");
@@ -809,6 +809,7 @@ int main()
     int count = 0;
     int element_option;
     int sort_option;
+    int year;
 
     const char *element[3];
     element[0] = "data_pas";
@@ -825,6 +826,9 @@ int main()
     if (file == NULL) {
         printf("Erro ao criar o arquivo.\n");
     }
+
+    printf("Escolha qual ano você deseja ver: (Ex: 2024)\n");
+    scanf("%d", &year);
 
     while (1) {
         printf("\nEscolha qual dado você deseja ordenar: \n1.Data\n2.Bioma\n3.Munícipio\n4.Ver Relatório Final\n5.Sair\n");
@@ -846,7 +850,7 @@ int main()
             break;
         }
 
-        data = read_csv(&count);
+        data = read_csv(&count, year);
 
         if (sort_option == 1) {
             bubble_sort(data, count, element[element_option-1]);
