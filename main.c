@@ -784,6 +784,22 @@ void bucket_sort(RowData *data, int size, const char *element) {
 }
 
 void show_report() {
+    char line[1000];
+
+    // File
+    FILE *file = fopen("report.txt", "r");
+    if (file == NULL) {
+        printf("Erro ao criar o arquivo.\n");
+        return;
+    }
+
+    printf("\n-------- Relatório --------\n\n");
+
+    while (fgets(line, sizeof(line), file) != NULL) {
+        printf("%s", line);
+    }
+
+    fclose(file);
 
 }
 
@@ -811,11 +827,12 @@ int main()
     }
 
     while (1) {
-        printf("\nEscolha qual dado você deseja ordenar: \n1.Data\n2.Bioma\n3.Munícipio\n4.Ver Relatório\n5.Sair\n");
+        printf("\nEscolha qual dado você deseja ordenar: \n1.Data\n2.Bioma\n3.Munícipio\n4.Ver Relatório Final\n5.Sair\n");
         scanf("%d", &element_option);
 
         if (element_option == 4) {
             show_report();
+            break;
         } else if (element_option >= 5) {
             break;
             

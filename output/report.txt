@@ -1,34 +1,14 @@
--------- data_pas - Bucket Sort --------
-Número de operações: 26083
-Número de Comparações: 8029302
+-------- data_pas - Insertion Sort --------
+Número de operações: 8029301
+Número de Comparações: 8016261
 Número de Trocas: 8003222
-Complexidade: O(n + k)
+Complexidade: O(n^2)
 Total de linhas: 13041
 
--------- bioma - Bucket Sort --------
-Número de operações: 26084
-Número de Comparações: 4485397
-Número de Trocas: 4459317
-Complexidade: O(n + k)
-Total de linhas: 13041
-
--------- municipio - Bucket Sort --------
-Número de operações: 26085
-Número de Comparações: 14973236
-Número de Trocas: 14947161
-Complexidade: O(n + k)
-Total de linhas: 13041
-
--------- bioma - Merge Sort --------
-Número de operações: 179231
-Número de Comparações: 110984
-Complexidade: O(n log n)
-Total de linhas: 13041
-
--------- bioma - Heap Sort --------
-Número de operações: 19560
-Número de Comparações: 189757
-Número de Trocas: 92684
+-------- bioma - Selection Sort --------
+Número de operações: 85040361
+Número de Comparações: 85027320
+Número de Trocas: 4882
 Complexidade: O(n^2)
 Total de linhas: 13041
 
