@@ -419,6 +419,7 @@ void binary_insertion_sort(RowData *data, int size, const char *element) {
         data[j + 1] = selected;
     }
 
+    // File
     FILE *file = fopen("report.txt", "a");
     if (file == NULL) {
         printf("Erro ao criar o arquivo.\n");
@@ -430,7 +431,7 @@ void binary_insertion_sort(RowData *data, int size, const char *element) {
     
     fclose(file);
     
-    // Mostra relatório
+    // Report
     printf("\n-------- %s - Binary Insertion Sort --------\n", element);
     printf("Número de operações: %d\nNúmero de Comparações: %d\nNúmero de Trocas: %d\nComplexidade: O(n^2)\nTotal de linhas: %d\n\n", operations, comparations, swaps, size);
 }
@@ -491,8 +492,101 @@ void selection_sort(RowData *data, int size, const char *element) {
     printf("Número de operações: %d\nNúmero de Comparações: %d\nNúmero de Trocas: %d\nComplexidade: O(n^2)\nTotal de linhas: %d\n\n", operations, comparation, swaps, size);
 }
 
-void heap_sort(RowData *data, int size) {
+void heapify(RowData *data, int size, int i, const char *element, int *comparations, int *swaps) {
+    const char *v_largest;
+    const char *v_left;
+    const char *v_right;
+    RowData temp;
+    int largest = i;
+    int left = 2 * i + 1;
+    int right = 2 * i + 2;
 
+    if (left < size) {
+        (*comparations)++;
+
+        if (strcmp(element, "data_pas") == 0) {
+            v_largest = data[largest].data_pas;
+            v_left = data[left].data_pas;
+        } else if (strcmp(element, "bioma") == 0) {
+            v_largest = data[largest].bioma;
+            v_left = data[left].bioma;
+        } else {
+            v_largest = data[largest].municipio;
+            v_left = data[left].municipio;
+        }
+
+        if (strcmp(v_left, v_largest) > 0) {
+            largest = left;
+        }
+    }
+
+    if (right < size) {
+        (*comparations)++;
+
+        if (strcmp(element, "data_pas") == 0) {
+            v_largest = data[largest].data_pas;
+            v_right = data[right].data_pas;
+        } else if (strcmp(element, "bioma") == 0) {
+            v_largest = data[largest].bioma;
+            v_right = data[right].bioma;
+        } else {
+            v_largest = data[largest].municipio;
+            v_right = data[right].municipio;
+        }
+
+        if (strcmp(v_right, v_largest) > 0) {
+            largest = right;
+        }
+    }
+
+    if (largest != i) {
+        (*swaps)++;
+        temp = data[i];
+        data[i] = data[largest];
+        data[largest] = temp;
+        
+
+        heapify(data, size, largest, element, comparations, swaps);
+    }
+}
+
+void heap_sort(RowData *data, int size, const char *element) {
+    RowData temp;
+    int comparations = 0;
+    int swaps = 0;
+    int operations = 0;
+    
+    for (int i = size / 2 -1; i >= 0; i--) {
+        operations++;
+        heapify(data, size, i, element, &comparations, &swaps);
+    }
+
+    for (int i = size -1; i > 0; i--) {
+        operations++;
+
+        temp = data[0];
+        data[0] = data[i];
+        data[i] = temp;
+        swaps++;
+
+        heapify(data, i, 0, element, &comparations, &swaps);
+    }
+
+    // File
+    FILE *file = fopen("report.txt", "a");
+    if (file == NULL) {
+        printf("Erro ao criar o arquivo.\n");
+        return;
+    }
+    
+    fprintf(file, "-------- %s - Heap Sort --------\n", element);
+    fprintf(file, "Número de operações: %d\nNúmero de Comparações: %d\nNúmero de Trocas: %d\nComplexidade: O(n^2)\nTotal de linhas: %d\n\n", operations, comparations, swaps, size);
+    
+    fclose(file);
+    
+    // Report
+    printf("\n-------- %s - Heap Sort --------\n", element);
+    printf("Número de operações: %d\nNúmero de Comparações: %d\nNúmero de Trocas: %d\nComplexidade: O(n^2)\nTotal de linhas: %d\n\n", operations, comparations, swaps, size);
 }
 
 void merge_sort(RowData *data, int size) {
@@ -579,7 +673,7 @@ int main()
         } else if (sort_option == 5) {
             selection_sort(data, count, element[element_option-1]);
         } else if (sort_option == 6) {
-            //heap_sort();
+            heap_sort(data, count, element[element_option-1]);
         } else if (sort_option == 7) {
             //merge_sort();
         } else if (sort_option == 8) {

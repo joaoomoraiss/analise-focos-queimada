@@ -1,28 +1,42 @@
--------- data_pas - Binary Insertion Sort --------
-Número de operações: 8801452
-Número de Comparações: 93597
-Número de Trocas: 8788412
+-------- data_pas - Heap Sort --------
+Número de operações: 19560
+Número de Comparações: 321480
+Número de Trocas: 170822
 Complexidade: O(n^2)
 Total de linhas: 13041
 
--------- bioma - Binary Insertion Sort --------
-Número de operações: 50415808
-Número de Comparações: 20501
-Número de Trocas: 50402768
+-------- bioma - Heap Sort --------
+Número de operações: 19560
+Número de Comparações: 189757
+Número de Trocas: 92684
 Complexidade: O(n^2)
 Total de linhas: 13041
 
--------- municipio - Binary Insertion Sort --------
-Número de operações: 37739869
-Número de Comparações: 42214
-Número de Trocas: 37726829
+-------- municipio - Heap Sort --------
+Número de operações: 19560
+Número de Comparações: 254267
+Número de Trocas: 129698
 Complexidade: O(n^2)
 Total de linhas: 13041
 
--------- bioma - Binary Insertion Sort --------
-Número de operações: 50415808
-Número de Comparações: 20501
-Número de Trocas: 50402768
+-------- bioma - Heap Sort --------
+Número de operações: 19560
+Número de Comparações: 189757
+Número de Trocas: 92684
+Complexidade: O(n^2)
+Total de linhas: 13041
+
+-------- bioma - Selection Sort --------
+Número de operações: 85040361
+Número de Comparações: 85027320
+Número de Trocas: 4882
+Complexidade: O(n^2)
+Total de linhas: 13041
+
+-------- bioma - Heap Sort --------
+Número de operações: 19560
+Número de Comparações: 189757
+Número de Trocas: 92684
 Complexidade: O(n^2)
 Total de linhas: 13041
 
