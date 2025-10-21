@@ -589,11 +589,197 @@ void heap_sort(RowData *data, int size, const char *element) {
     printf("Número de operações: %d\nNúmero de Comparações: %d\nNúmero de Trocas: %d\nComplexidade: O(n^2)\nTotal de linhas: %d\n\n", operations, comparations, swaps, size);
 }
 
-void merge_sort(RowData *data, int size) {
-
+void merge(RowData *left, int len_left, RowData *right, int len_right, RowData *data, const char *element, int *comparations, int *operations) {
+    int i = 0, j = 0, k = 0;
+    
+    while (i < len_left && j < len_right) {
+        (*operations)++;
+        (*comparations)++;
+        
+        const char *v_left, *v_right;
+        
+        if (strcmp(element, "data_pas") == 0) {
+            v_left = left[i].data_pas;
+            v_right = right[j].data_pas;
+        } else if (strcmp(element, "bioma") == 0) {
+            v_left = left[i].bioma;
+            v_right = right[j].bioma;
+        } else {
+            v_left = left[i].municipio;
+            v_right = right[j].municipio;
+        }
+        
+        if (strcmp(v_left, v_right) <= 0) {
+            data[k] = left[i];
+            i++;
+        } else {
+            data[k] = right[j];
+            j++;
+        }
+        k++;
+    }
+    
+    while (i < len_left) {
+        (*operations)++;
+        data[k] = left[i];
+        i++;
+        k++;
+    }
+    
+    while (j < len_right) {
+        (*operations)++;
+        data[k] = right[j];
+        j++;
+        k++;
+    }
 }
 
-void bucket_sort(RowData *data, int size) {
+void merge_sort(RowData *data, int size, const char *element, int *comparations, int *operations) {
+    int middle;
+    RowData *left;
+    RowData *right;
+    
+    if (size > 1) {
+        middle = size / 2;
+        left = malloc(sizeof(RowData) * middle);
+        right = malloc(sizeof(RowData) * (size - middle));
+
+        for (int i = 0; i < middle; i++) {
+            left[i] = data[i];
+        }
+
+        for (int i = 0; i < size - middle; i++) {
+            right[i] = data[middle + i];
+        }
+
+        merge_sort(left, middle, element, comparations, operations);
+        merge_sort(right, size - middle, element, comparations, operations);
+
+        merge(left, middle, right, size - middle, data, element, comparations, operations);
+
+        free(left);
+        free(right);
+    }
+}
+
+void insertion_sort_bucket(RowData *arr, int n, const char *element, int *comparations, int *swaps) {
+    RowData key;
+    const char *key_value;
+    int j;
+
+    for (int i = 1; i < n; i++) {
+        key = arr[i];
+        j = i - 1;
+        
+        
+        if (strcmp(element, "data_pas") == 0) {
+            key_value = key.data_pas;
+        } else if (strcmp(element, "bioma") == 0) {
+            key_value = key.bioma;
+        } else {
+            key_value = key.municipio;
+        }
+        
+        while (j >= 0) {
+            (*comparations)++;
+
+            const char *current_value;
+            if (strcmp(element, "data_pas") == 0) {
+                current_value = arr[j].data_pas;
+            } else if (strcmp(element, "bioma") == 0) {
+                current_value = arr[j].bioma;
+            } else {
+                current_value = arr[j].municipio;
+            }
+            
+            if (strcmp(current_value, key_value) > 0) {
+                arr[j + 1] = arr[j];
+                (*swaps)++;
+                j--;
+            } else {
+                break;
+            }
+        }
+        arr[j + 1] = key;
+    }
+}
+
+void bucket_sort(RowData *data, int size, const char *element) {
+    int comparations = 0;
+    int operations = 0;
+    int swaps = 0;
+    int numBuckets = 10;
+    RowData **buckets = malloc(sizeof(RowData*) * numBuckets);
+    int *bucketSizes = calloc(numBuckets, sizeof(int));
+    int index = 0;
+
+    if (size <= 1) {
+        return;
+    }
+
+    for (int i = 0; i < numBuckets; i++) {
+        buckets[i] = malloc(sizeof(RowData) * size);
+        bucketSizes[i] = 0;
+    }
+
+    for (int i = 0; i < size; i++) {
+        operations++;
+        
+        const char *value;
+        if (strcmp(element, "data_pas") == 0) {
+            value = data[i].data_pas;
+        } else if (strcmp(element, "bioma") == 0) {
+            value = data[i].bioma;
+        } else {
+            value = data[i].municipio;
+        }
+        
+        int bucketIndex = ((unsigned char)value[0] * numBuckets) / 256;
+        
+        if (bucketIndex >= numBuckets) {
+            bucketIndex = numBuckets - 1;
+        }
+        
+        buckets[bucketIndex][bucketSizes[bucketIndex]++] = data[i];
+    }
+
+    for (int i = 0; i < numBuckets; i++) {
+        if (bucketSizes[i] > 0) {
+            operations++;
+            insertion_sort_bucket(buckets[i], bucketSizes[i], element, &comparations, &swaps);
+            comparations += bucketSizes[i];
+        }
+    }
+
+    
+    for (int i = 0; i < numBuckets; i++) {
+        for (int j = 0; j < bucketSizes[i]; j++) {
+            operations++;
+            data[index++] = buckets[i][j];
+        }
+    }
+
+    for (int i = 0; i < numBuckets; i++) {
+        free(buckets[i]);
+    }
+    free(buckets);
+    free(bucketSizes);
+
+    // File
+    FILE *file = fopen("report.txt", "a");
+    if (file == NULL) {
+        printf("Erro ao criar o arquivo.\n");
+        return;
+    }
+    
+    fprintf(file, "-------- %s - Bucket Sort --------\n", element);
+    fprintf(file, "Número de operações: %d\nNúmero de Comparações: %d\nNúmero de Trocas: %d\nComplexidade: O(n + k)\nTotal de linhas: %d\n\n", operations, comparations, swaps, size);
+    
+    fclose(file);
+    
+    // Report
+    printf("\n-------- %s - Bucket Sort --------\n", element);
+    printf("Número de operações: %d\nNúmero de Comparações: %d\nNúmero de Trocas: %d\nComplexidade: O(n + k)\nTotal de linhas: %d\n\n", operations, comparations, swaps, size);
 
 }
 
@@ -636,7 +822,7 @@ int main()
         }
 
         // Select the sort algoritmo
-        printf("Escolha o algoritmo de ordenação: \n1.Bubble Sort\n2.Quick Sort\n3.Insertion Sort\n4.Binary Insertion Sort\n5.Selection Sort\n6.Heap Sort\n7.Merge Sort\n8.Bucket Sort\n9.Sair\n");
+        printf("Escolha o algoritmo de ordenação: \n1.Bubble Sort\n2.Quick Sort\n3.Insertion Sort\n4.Binary Insertion Sort\n5.Selection Sort\n6.Heap Sort\n7.Merge Sort\n8.Bucket Sort (10)\n9.Sair\n");
         scanf("%d", &sort_option);
 
         if (sort_option >= 9) {
@@ -675,9 +861,28 @@ int main()
         } else if (sort_option == 6) {
             heap_sort(data, count, element[element_option-1]);
         } else if (sort_option == 7) {
-            //merge_sort();
+            int comparations = 0;
+            int operations = 0;
+
+            merge_sort(data, count, element[element_option-1], &comparations, &operations);
+
+            // File
+            FILE *file = fopen("report.txt", "a");
+            if (file == NULL) {
+                printf("Erro ao criar o arquivo.\n");
+                return;
+            }
+            
+            fprintf(file, "-------- %s - Merge Sort --------\n", element[element_option-1]);
+            fprintf(file, "Número de operações: %d\nNúmero de Comparações: %d\nComplexidade: O(n log n)\nTotal de linhas: %d\n\n", operations, comparations, count);
+            
+            fclose(file);
+            
+            // Report
+            printf("\n-------- %s - Merge Sort --------\n", element[element_option-1]);
+            printf("Número de operações: %d\nNúmero de Comparações: %d\nComplexidade: O(n log n)\nTotal de linhas: %d\n\n", operations, comparations, count);
         } else if (sort_option == 8) {
-            //bucket_sort();
+            bucket_sort(data, count, element[element_option-1]);
         }
 
         //Show data
