@@ -352,8 +352,87 @@ void insertion_sort(RowData *data, int size, const char *element) {
     printf("Número de operações: %d\nNúmero de Comparações: %d\nNúmero de Trocas: %d\nComplexidade: O(n^2)\nTotal de linhas: %d\n\n", operations, comparation, swaps, size);
 }
 
-void binary_insertion_sort(RowData *data, int size) {
+int binary_search(RowData *data, const char *item, int low, int high, const char *element, int *comparations) {
+    const char *mid_value;
+    int mid;
+    int cmp;
 
+    while (low <= high) {
+        mid = low + (high - low) / 2;
+        (*comparations)++;
+
+        if (strcmp(element, "data_pas") == 0) {
+            mid_value = data[mid].data_pas;
+        } else if (strcmp(element, "bioma") == 0) {
+            mid_value = data[mid].bioma;
+        } else {
+            mid_value = data[mid].municipio;
+        }
+
+        cmp = strcmp(item, mid_value);
+
+        if (cmp == 0) {
+            return mid +1;
+        } else if (cmp > 0) {
+            low = mid + 1;
+        } else {
+            high = mid - 1;
+        }
+    }
+
+    return low;
+}
+
+void binary_insertion_sort(RowData *data, int size, const char *element) {
+    int comparations = 0;
+    int swaps = 0;
+    int operations = 0;
+    int loc;
+    int j;
+    
+    for (int i = 1; i < size; i++) {
+        operations++;
+        RowData selected = data[i];
+        j = i - 1;
+
+        const char *selected_value;
+        if (strcmp(element, "data_pas") == 0) {
+            selected_value = selected.data_pas;
+        } else if (strcmp(element, "bioma") == 0) {
+            selected_value = selected.bioma;
+        } else if (strcmp(element, "municipio") == 0) {
+            selected_value = selected.municipio;
+        } else {
+            printf("Erro ao achar o elemento %s\n", element);
+            return;
+        }
+
+        loc = binary_search(data, selected_value, 0, j, element, &comparations);
+
+        while (j >= loc) {
+            operations++;
+            data[j + 1] = data[j];
+            swaps++;
+            j--;
+        }
+
+        data[j + 1] = selected;
+    }
+
+    FILE *file = fopen("report.txt", "a");
+    if (file == NULL) {
+        printf("Erro ao criar o arquivo.\n");
+        return;
+    }
+    
+    fprintf(file, "-------- %s - Binary Insertion Sort --------\n", element);
+    fprintf(file, "Número de operações: %d\nNúmero de Comparações: %d\nNúmero de Trocas: %d\nComplexidade: O(n^2)\nTotal de linhas: %d\n\n", operations, comparations, swaps, size);
+    
+    fclose(file);
+    
+    // Mostra relatório
+    printf("\n-------- %s - Binary Insertion Sort --------\n", element);
+    printf("Número de operações: %d\nNúmero de Comparações: %d\nNúmero de Trocas: %d\nComplexidade: O(n^2)\nTotal de linhas: %d\n\n", operations, comparations, swaps, size);
 }
 
 void selection_sort(RowData *data, int size, const char *element) {
@@ -496,7 +575,7 @@ int main()
         } else if (sort_option == 3) {
             insertion_sort(data, count, element[element_option-1]);
         } else if (sort_option == 4) {
-            //binary_insertion_sort();
+            binary_insertion_sort(data, count, element[element_option-1]);
         } else if (sort_option == 5) {
             selection_sort(data, count, element[element_option-1]);
         } else if (sort_option == 6) {

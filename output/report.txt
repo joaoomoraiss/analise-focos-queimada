@@ -1,21 +1,28 @@
--------- data_pas - Selection Sort --------
-Número de operações: 85040361
-Número de Comparações: 85027320
-Número de Trocas: 10673
+-------- data_pas - Binary Insertion Sort --------
+Número de operações: 8801452
+Número de Comparações: 93597
+Número de Trocas: 8788412
 Complexidade: O(n^2)
 Total de linhas: 13041
 
--------- bioma - Selection Sort --------
-Número de operações: 85040361
-Número de Comparações: 85027320
-Número de Trocas: 4882
+-------- bioma - Binary Insertion Sort --------
+Número de operações: 50415808
+Número de Comparações: 20501
+Número de Trocas: 50402768
 Complexidade: O(n^2)
 Total de linhas: 13041
 
--------- municipio - Selection Sort --------
-Número de operações: 85040361
-Número de Comparações: 85027320
-Número de Trocas: 12919
+-------- municipio - Binary Insertion Sort --------
+Número de operações: 37739869
+Número de Comparações: 42214
+Número de Trocas: 37726829
+Complexidade: O(n^2)
+Total de linhas: 13041
+
+-------- bioma - Binary Insertion Sort --------
+Número de operações: 50415808
+Número de Comparações: 20501
+Número de Trocas: 50402768
 Complexidade: O(n^2)
 Total de linhas: 13041
 
