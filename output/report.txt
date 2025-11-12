@@ -1,7 +1,16 @@
--------- data_pas - Bucket Sort --------
-Número de operações: 9059
-Número de Comparações: 660772
-Número de Trocas: 651716
-Complexidade: O(n + k)
-Total de linhas: 4529
+-------- data_pas - Heap Sort --------
+Número de operações: 18119
+Número de Comparações: 291693
+Número de Trocas: 154144
+Complexidade: O(n^2)
+Total de linhas: 12080
+
+
+-------- data_pas - Quick Sort --------
+Número de operações: 631920
+Número de Comparações: 315776
+Número de Partições: 368
+Número de Trocas: 315776
+Complexidade: O(n log n)
+Total de linhas: 12080
 

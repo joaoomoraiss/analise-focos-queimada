@@ -23,7 +23,7 @@ int quick_comparation = 0;
 int quick_partitions = 0;
 int quick_swaps = 0;
 
-void showData(RowData* allData, int size) {
+void show_data(RowData* allData, int size) {
 
     //Show some data
     printf("Os primeiros 5 resultados:\n");
@@ -124,31 +124,6 @@ RowData* read_csv(int *total_count, int year) {
     *total_count = count;
 
     return data;
-}
-
-void bubble_sort_data(RowData *data, int size) {
-    int change = 1;
-
-    for(int i = 0; i < size-1; i++) {
-        
-        while (change == 1) {
-            change = 0;
-            for (int j = 0; j < size - i - 1; j++) {
-                if (strcmp(data[j].data_pas, data[j + 1].data_pas) > 0) {
-                    RowData temp = data[j];
-                    data[j] = data[j + 1];
-                    data[j+1] = temp;
-
-                    change = 1;
-                }
-            }
-
-            //Show the progress
-            if((i + 1) % 1000 == 0) {
-                printf("Progresso: %d/%d iterações\n", i + 1, size - 1);
-            }
-        }
-    }
 }
 
 void bubble_sort(RowData *data, int size, const char *element) {
@@ -292,11 +267,12 @@ void insertion_sort(RowData *data, int size, const char *element) {
     int comparation = 0;
     int swaps = 0;
     int operations = 0;
+    int j;
     
     for (int i = 1; i < size; i++) {
         operations++;
         RowData key = data[i];
-        int j = i - 1;
+        j = i - 1;
         
         const char *key_value;
         if (strcmp(element, "data_pas") == 0) {
@@ -825,10 +801,16 @@ int main()
     FILE *file = fopen("report.txt", "w");
     if (file == NULL) {
         printf("Erro ao criar o arquivo.\n");
+        return;
     }
 
     printf("Escolha qual ano você deseja ver: (Ex: 2024)\n");
     scanf("%d", &year);
+
+    if (year > 2024 || year < 2003) {
+        printf("Não há arquivos com o ano %d, então o ano estabelecido foi 2024.\n", year);
+        year = 2024;
+    }
 
     while (1) {
         printf("\nEscolha qual dado você deseja ordenar: \n1.Data\n2.Bioma\n3.Munícipio\n4.Ver Relatório Final\n5.Sair\n");
@@ -837,7 +819,7 @@ int main()
         if (element_option == 4) {
             show_report();
             break;
-        } else if (element_option >= 5) {
+        } else if (element_option >= 5 || element_option < 1) {
             break;
             
         }
@@ -846,7 +828,7 @@ int main()
         printf("Escolha o algoritmo de ordenação: \n1.Bubble Sort\n2.Quick Sort\n3.Insertion Sort\n4.Binary Insertion Sort\n5.Selection Sort\n6.Heap Sort\n7.Merge Sort\n8.Bucket Sort (10)\n9.Sair\n");
         scanf("%d", &sort_option);
 
-        if (sort_option >= 9) {
+        if (sort_option >= 9 || sort_option < 1) {
             break;
         }
 
@@ -907,7 +889,7 @@ int main()
         }
 
         //Show data
-        showData(data, count);
+        show_data(data, count);
 
         
     }
